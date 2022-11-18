@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"shmz_book/config"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -16,8 +18,20 @@ func main() {
 }
 
 func run(ctx context.Context) error {
+	cfg, err := config.New()
+	if err != nil {
+		return err
+	}
+
+	lsn, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Port))
+	if err != nil {
+		log.Fatalf("failed to listen port %d: %v", cfg.Port, err)
+	}
+
+	url := fmt.Sprintf("http://%s", lsn.Addr().String())
+	log.Printf("start with: %v", url)
+
 	s := &http.Server{
-		Addr: ":18080",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "hello %s", r.URL.Path[1:])
 		}),
@@ -25,7 +39,7 @@ func run(ctx context.Context) error {
 	errg, ctx := errgroup.WithContext(ctx)
 	// 別Goroutineでhttp serverを起動
 	errg.Go(func() error {
-		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := s.Serve(lsn); err != nil && err != http.ErrServerClosed {
 			log.Printf("failed to close: %+v", err)
 			return err
 		}
