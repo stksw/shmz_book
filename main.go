@@ -6,7 +6,11 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
 	"shmz_book/config"
+	"syscall"
+	"time"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -18,6 +22,10 @@ func main() {
 }
 
 func run(ctx context.Context) error {
+	// 終了シグナルを待機
+	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
 	cfg, err := config.New()
 	if err != nil {
 		return err
@@ -33,6 +41,7 @@ func run(ctx context.Context) error {
 
 	s := &http.Server{
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(5 * time.Second)
 			fmt.Fprintf(w, "hello %s", r.URL.Path[1:])
 		}),
 	}

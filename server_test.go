@@ -4,17 +4,28 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"testing"
 
 	"golang.org/x/sync/errgroup"
 )
 
-func TestRun(t *testing.T) {
+func TestServer_Run(t *testing.T) {
+	lsn, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		t.Fatalf("failed to listen port %v", err)
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 	errg, ctx := errgroup.WithContext(ctx)
+	mux := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "hello %s", r.URL.Path[1:])
+	})
+
 	errg.Go(func() error {
-		return run(ctx)
+		s := NewServer(lsn, mux)
+		return s.Run(ctx)
 	})
 
 	in := "message"
