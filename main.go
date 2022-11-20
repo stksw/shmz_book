@@ -28,7 +28,10 @@ func run(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s", lsn.Addr().String())
 	log.Printf("start with: %v", url)
 
+	// http.Handlerが返ってくる
 	mux := NewMux()
+	// Hanlderを元にServer構造体を生成
 	s := NewServer(lsn, mux)
+	// 別Goroutineで起動
 	return s.Run(ctx)
 }
