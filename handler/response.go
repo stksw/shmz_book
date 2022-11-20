@@ -21,7 +21,7 @@ func ResponseJSON(ctx context.Context, w http.ResponseWriter, body any, status i
 			Message: http.StatusText(http.StatusInternalServerError),
 		}
 		if err := json.NewEncoder(w).Encode(rsp); err != nil {
-			fmt.Println("write error response: %v", err)
+			fmt.Printf("write error response: %v", err)
 		}
 		return
 	}
