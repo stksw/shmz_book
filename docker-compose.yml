@@ -19,19 +19,18 @@ services:
     ports:
       - '18000:8080'
   todo-db:
-    image: mysql:8.0.29
-    platform: linux/amd64
+    image: mysql:5.7
+    restart: always
     container_name: todo-db
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_USER: todo
-      MYSQL_PASSWORD: todo
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: todo
     volumes:
-      - todo-db-data:/var/lib/mysql
-      - $PWD/_tools/mysql/conf.d:/etc/mysql/conf.d:cached
+      - mysql-data:/var/lib/mysql
     ports:
       - '33306:3306'
 
 volumes:
-  todo-db-data:
+  mysql-data:

@@ -2,6 +2,7 @@ package store
 
 import (
 	"errors"
+	"fmt"
 	"shmz_book/entity"
 )
 
@@ -23,6 +24,7 @@ func (ts *TaskStore) Add(t *entity.Task) (entity.TaskID, error) {
 }
 
 func (ts *TaskStore) All() entity.Tasks {
+	fmt.Println("len", len(ts.Tasks))
 	tasks := make([]*entity.Task, len(ts.Tasks))
 	for i, t := range ts.Tasks {
 		tasks[i] = t

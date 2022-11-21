@@ -24,10 +24,10 @@ test: ## Execute tests
 	go test -race -shuffle=on ./...
 
 dry-migrate: ## Try migration
-	mysqldef -u todo -p todo -h todo-db -P 33306 todo --dry-run < ./_tools/mysql/schema.sql
+	mysqldef -u root -p password -h todo-db -P 33306 todo --dry-run < ./_tools/mysql/schema.sql
 
 migrate:  ## Execute migration
-	mysqldef -u todo -p todo -h todo-db -P 33306 todo < ./_tools/mysql/schema.sql
+	mysqldef -u root -p password -h todo-db -P 33306 todo < ./_tools/mysql/schema.sql
 
 help: ## Show options
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
