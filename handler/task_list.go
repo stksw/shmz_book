@@ -18,7 +18,6 @@ type task struct {
 func (tl *TaskList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	tasks, err := tl.Service.TaskList(ctx)
-	// tasks, err := tl.Repo.TaskList(ctx, tl.DB)
 	if err != nil {
 		ResponseJSON(ctx, w, &ErrResponse{
 			Message: err.Error(),
@@ -27,7 +26,6 @@ func (tl *TaskList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rsp := []task{}
-
 	for _, t := range tasks {
 		rsp = append(rsp, task{
 			ID:     t.ID,

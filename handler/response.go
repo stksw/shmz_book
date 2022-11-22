@@ -16,12 +16,13 @@ func ResponseJSON(ctx context.Context, w http.ResponseWriter, body any, status i
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
+		fmt.Printf("encode response error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		rsp := ErrResponse{
 			Message: http.StatusText(http.StatusInternalServerError),
 		}
 		if err := json.NewEncoder(w).Encode(rsp); err != nil {
-			fmt.Printf("write error response: %v", err)
+			fmt.Printf("write error response error: %v", err)
 		}
 		return
 	}

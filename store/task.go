@@ -9,7 +9,7 @@ func (r *Repository) TaskList(
 	ctx context.Context, db Queryer,
 ) (entity.Tasks, error) {
 	var tasks entity.Tasks
-	sql := `SELECT id, title status, created, modified FROM task;`
+	sql := `SELECT id, title status FROM task;`
 	if err := db.SelectContext(ctx, &tasks, sql); err != nil {
 		return nil, err
 	}

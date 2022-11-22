@@ -21,13 +21,13 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		_, _ = w.Write([]byte(`{"status": "ok"}`))
 	})
 
-	validator := validator.New()
 	db, cleanup, err := store.New(ctx, cfg)
 	if err != nil {
 		return nil, cleanup, err
 	}
 
 	repo := store.Repository{Clocker: clock.RealClocker{}}
+	validator := validator.New()
 	at := &handler.AddTask{
 		Service:   &service.AddTask{DB: db, Repo: &repo},
 		Validator: validator,
