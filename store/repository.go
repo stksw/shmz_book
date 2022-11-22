@@ -8,6 +8,7 @@ import (
 	"shmz_book/config"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 

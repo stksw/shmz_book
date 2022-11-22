@@ -3,12 +3,10 @@ package store
 import (
 	"context"
 	"shmz_book/entity"
-
-	"github.com/jmoiron/sqlx"
 )
 
 func (r *Repository) TaskList(
-	ctx context.Context, db *sqlx.DB,
+	ctx context.Context, db Queryer,
 ) (entity.Tasks, error) {
 	var tasks entity.Tasks
 	sql := `SELECT id, title status, created, modified FROM task;`
@@ -23,12 +21,9 @@ func (r *Repository) AddTask(
 ) error {
 	t.Created = r.Clocker.Now()
 	t.Modified = r.Clocker.Now()
-	sql := `INSERT INTO task
-			(title, status, created, modified)
-		VALUES (?, ?, ?, ?)`
+	sql := `INSERT INTO task (title, status, created, modified) VALUES (?, ?, ?, ?)`
 	result, err := db.ExecContext(
-		ctx, sql, t.Title, t.Status,
-		t.Created, t.Modified,
+		ctx, sql, t.Title, t.Status, t.Created, t.Modified,
 	)
 	if err != nil {
 		return err

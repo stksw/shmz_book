@@ -29,8 +29,13 @@ func run(ctx context.Context) error {
 	log.Printf("start with: %v", url)
 
 	// http.Handlerが返ってくる
-	mux := NewMux()
-	// Hanlderを元にServer構造体を生成
+	mux, cleanup, err := NewMux(ctx, cfg)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
+	// http.Handlerを元にServer構造体を生成
 	s := NewServer(lsn, mux)
 	// 別Goroutineで起動
 	return s.Run(ctx)

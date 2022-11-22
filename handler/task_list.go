@@ -3,11 +3,10 @@ package handler
 import (
 	"net/http"
 	"shmz_book/entity"
-	"shmz_book/store"
 )
 
 type TaskList struct {
-	Store *store.TaskStore
+	Service TaskListService
 }
 
 type task struct {
@@ -18,7 +17,15 @@ type task struct {
 
 func (tl *TaskList) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	tasks := tl.Store.All()
+	tasks, err := tl.Service.TaskList(ctx)
+	// tasks, err := tl.Repo.TaskList(ctx, tl.DB)
+	if err != nil {
+		ResponseJSON(ctx, w, &ErrResponse{
+			Message: err.Error(),
+		}, http.StatusInternalServerError)
+		return
+	}
+
 	rsp := []task{}
 
 	for _, t := range tasks {
