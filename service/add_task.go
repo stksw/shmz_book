@@ -12,6 +12,7 @@ type AddTask struct {
 	Repo TaskAdder
 }
 
+// entityを生成してRepositoryに渡し、結果をhandlerに返す
 func (at *AddTask) AddTask(ctx context.Context, title string) (*entity.Task, error) {
 	task := &entity.Task{
 		Title:  title,

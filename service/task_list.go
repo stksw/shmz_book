@@ -12,6 +12,7 @@ type TaskList struct {
 	Repo TaskLister
 }
 
+// Repositoryに渡して、結果をhandlerに返す
 func (tl *TaskList) TaskList(ctx context.Context) (entity.Tasks, error) {
 	ts, err := tl.Repo.TaskList(ctx, tl.DB)
 	if err != nil {
