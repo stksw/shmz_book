@@ -5,6 +5,7 @@ import (
 	"shmz_book/entity"
 )
 
+//go:generate go run github.com/matryer/moq -out moq_test.go . TaskListService AddTaskService
 type TaskListService interface {
 	TaskList(ctx context.Context) (entity.Tasks, error)
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func AssertJSON(t testing.T, want, got []byte) {
+func AssertJSON(t *testing.T, want, got []byte) {
 	t.Helper()
 	var jw, jg any
 	if err := json.Unmarshal(want, &jw); err != nil {
@@ -24,7 +24,7 @@ func AssertJSON(t testing.T, want, got []byte) {
 	}
 }
 
-func AssertResponse(t testing.T, got *http.Response, status int, body []byte) {
+func AssertResponse(t *testing.T, got *http.Response, status int, body []byte) {
 	t.Helper()
 	t.Cleanup(func() { _ = got.Body.Close() })
 
